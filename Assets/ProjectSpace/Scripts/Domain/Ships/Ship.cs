@@ -55,23 +55,41 @@ namespace ProjectSpace.Domain.Ships
             return true;
         }
 
-        public bool RemoveModule(ModuleInstance module)
+        public bool TryMoveModule(ModuleInstance module, GridPosition newPosition)
         {
             if (!_modules.Contains(module))
             {
                 return false;
             }
 
-            _grid.RemoveModule(module);
+            if (module == _core)
+            {
+                return false;
+            }
 
-            _modules.Remove(module);
-
-            return true;
+            return _grid.TryMoveModule(module, newPosition);
         }
 
         public ModuleInstance? GetModuleAt(GridPosition position)
         {
             return _grid.GetModuleAt(position);
+        }
+        public bool TryRemoveModule(ModuleInstance module)
+        {
+            if (!_modules.Contains(module))
+            {
+                return false;
+            }
+
+            if (module == _core)
+            {
+                return false;
+            }
+
+            _grid.RemoveModule(module);
+            _modules.Remove(module);
+
+            return true;
         }
 
         public bool ApplyDamage(

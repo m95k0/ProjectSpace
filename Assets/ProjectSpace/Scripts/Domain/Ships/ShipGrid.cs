@@ -35,9 +35,7 @@ namespace ProjectSpace.Domain.Ships
             return GetModuleAt(position) == null;
         }
 
-        public bool CanPlaceModule(
-    ModuleDefinition definition,
-    GridPosition position)
+        public bool CanPlaceModule(ModuleDefinition definition, GridPosition position)
         {
             GridSize size = definition.Size;
 
@@ -108,6 +106,31 @@ namespace ProjectSpace.Domain.Ships
                     _cells[currentPosition.X, currentPosition.Y] = null;
                 }
             }
+        }
+
+        internal bool TryMoveModule(ModuleInstance module, GridPosition newPosition)
+        {
+            if (module.Position.Equals(newPosition))
+            {
+                return true;
+            }
+
+            GridPosition oldPosition = module.Position;
+
+            RemoveModule(module);
+
+            if (!CanPlaceModule(module.Definition, newPosition))
+            {
+                PlaceModule(module);
+
+                return false;
+            }
+
+            module.MoveTo(newPosition);
+
+            PlaceModule(module);
+
+            return true;
         }
 
         public ShipGrid(GridSize size)

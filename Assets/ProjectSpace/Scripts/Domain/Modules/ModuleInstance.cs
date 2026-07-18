@@ -40,6 +40,10 @@ namespace ProjectSpace.Domain.Modules
                 CurrentHealth = Definition.MaxHealth;
             }
         }
+        internal void MoveTo(GridPosition position)
+        {
+            Position = position;
+        }
 
         public ModuleInstance(ModuleDefinition definition, GridPosition position)
         {
