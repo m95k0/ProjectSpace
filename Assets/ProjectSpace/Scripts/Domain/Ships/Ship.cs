@@ -8,10 +8,16 @@ namespace ProjectSpace.Domain.Ships
     {
         private readonly ShipGrid _grid;
         private readonly List<ModuleInstance> _modules;
+        private ModuleInstance _core;
+        private bool _isDestroyed;
+
+        public ModuleInstance? Core => _core;
 
         public GridSize Size => _grid.Size;
 
         public IReadOnlyList<ModuleInstance> Modules => _modules;
+
+        public bool IsDestroyed => _isDestroyed;
 
         public Ship(GridSize size)
         {
@@ -28,6 +34,11 @@ namespace ProjectSpace.Domain.Ships
                 return false;
             }
 
+            if (definition.Type == ModuleType.Core && _core != null)
+            {
+                return false;
+            }
+
             ModuleInstance module = new ModuleInstance(
                 definition,
                 position);
@@ -35,6 +46,11 @@ namespace ProjectSpace.Domain.Ships
             _grid.PlaceModule(module);
 
             _modules.Add(module);
+
+            if (definition.Type == ModuleType.Core)
+            {
+                _core = module;
+            }
 
             return true;
         }
@@ -56,6 +72,27 @@ namespace ProjectSpace.Domain.Ships
         public ModuleInstance? GetModuleAt(GridPosition position)
         {
             return _grid.GetModuleAt(position);
+        }
+
+        public bool ApplyDamage(
+        GridPosition position,
+        int amount)
+        {
+            ModuleInstance? module = _grid.GetModuleAt(position);
+
+            if (module == null)
+            {
+                return false;
+            }
+
+            module.TakeDamage(amount);
+
+            if (module == _core && module.IsDestroyed)
+            {
+                _isDestroyed = true;
+            }
+
+            return true;
         }
     }
 }

@@ -10,6 +10,37 @@ namespace ProjectSpace.Domain.Modules
 
         public int CurrentHealth { get; private set; }
 
+        public bool IsDestroyed => CurrentHealth <= 0;
+
+        public void TakeDamage(int amount)
+        {
+            if (amount <= 0)
+            {
+                return;
+            }
+
+            CurrentHealth -= amount;
+
+            if (CurrentHealth < 0)
+            {
+                CurrentHealth = 0;
+            }
+        }
+        public void Repair(int amount)
+        {
+            if (amount <= 0)
+            {
+                return;
+            }
+
+            CurrentHealth += amount;
+
+            if (CurrentHealth > Definition.MaxHealth)
+            {
+                CurrentHealth = Definition.MaxHealth;
+            }
+        }
+
         public ModuleInstance(ModuleDefinition definition, GridPosition position)
         {
             Definition = definition;
