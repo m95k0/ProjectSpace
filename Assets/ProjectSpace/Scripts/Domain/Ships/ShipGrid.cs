@@ -11,6 +11,29 @@ namespace ProjectSpace.Domain.Ships
 
         private readonly ModuleInstance?[,] _cells;
 
+        private void TryAddNeighbor(GridPosition position, ModuleInstance module, HashSet<ModuleInstance> neighbors)
+        {
+
+            if (!IsInside(position))
+            {
+                return;
+            }
+
+            ModuleInstance? neighbor = GetModuleAt(position);
+
+            if (neighbor == null)
+            {
+                return;
+            }
+
+            if (neighbor == module)
+            {
+                return;
+            }
+
+            neighbors.Add(neighbor);
+        }
+
         private bool IsInside(GridPosition position)
         {
             return position.X >= 0 &&
@@ -133,8 +156,34 @@ namespace ProjectSpace.Domain.Ships
             return true;
         }
 
+        internal IReadOnlyCollection<ModuleInstance> GetNeighbors(ModuleInstance module)
+        {
+            HashSet<ModuleInstance> neighbors = new();
+
+            GridPosition position = module.Position;
+            GridSize size = module.Definition.Size;
+
+            for (int y = 0; y < size.Height; y++)
+            {
+                for (int x = 0; x < size.Width; x++)
+                {
+                    GridPosition cell = new GridPosition(
+                        position.X + x,
+                        position.Y + y);
+
+                    TryAddNeighbor(cell.Left(), module, neighbors);
+                    TryAddNeighbor(cell.Right(), module, neighbors);
+                    TryAddNeighbor(cell.Down(), module, neighbors);
+                    TryAddNeighbor(cell.Up(), module, neighbors);
+                }
+            }
+
+            return neighbors;
+        }
+
         public ShipGrid(GridSize size)
         {
+            Size = size;
             _cells = new ModuleInstance[size.Width, size.Height];
         }
     }

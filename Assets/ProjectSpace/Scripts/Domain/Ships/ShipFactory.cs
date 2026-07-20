@@ -15,11 +15,11 @@ namespace ProjectSpace.Domain.Ships
 
             ship.TryAddModule(
                 ModuleCatalog.Cockpit,
-                new GridPosition(14, 11));
+                new GridPosition(14, 12));
 
             ship.TryAddModule(
                 ModuleCatalog.Engine,
-                new GridPosition(11, 14));
+                new GridPosition(12, 14));
 
             ship.TryAddModule(
                 ModuleCatalog.Engine,

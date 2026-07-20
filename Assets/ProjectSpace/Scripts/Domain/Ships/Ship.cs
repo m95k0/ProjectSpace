@@ -91,6 +91,10 @@ namespace ProjectSpace.Domain.Ships
 
             return true;
         }
+        internal IReadOnlyCollection<ModuleInstance> GetNeighbors(ModuleInstance module)
+        {
+            return _grid.GetNeighbors(module);
+        }
 
         public bool ApplyDamage(
         GridPosition position,
