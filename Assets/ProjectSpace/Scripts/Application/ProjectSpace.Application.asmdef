@@ -1,0 +1,16 @@
+{
+    "name": "ProjectSpace.Application",
+    "rootNamespace": "ProjectSpace.Application",
+    "references": [
+        "GUID:abc23cfa44043af42942fe27c8383b88"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
